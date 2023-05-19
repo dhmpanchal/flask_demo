@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block body %}
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('{{ url_for('static', filename='img/home-bg.jpg') }}')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Admin Panel</h1>
+                    <span class="subheading">Manage your posts and change them</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+
+            <div class="float-right">
+                <a href="/dashboard"> <button class="btn btn-primary btn-sm"> Back</button></a>
+                <a href="/logout"> <button class="btn btn-primary btn-sm"> Logout</button></a>
+            </div>
+            <hr>
+
+            <form name="frm-sign-up" class="form-signin" action="/post/add" method="post" enctype="multipart/form-data">
+                <h1 class="h3 mb-3 font-weight-normal">Add New Post</h1>
+                <div class="form-group">
+                    <label for="title" class="sr-only">Title</label>
+                    <input type="text" id="title" name="title" class="form-control" placeholder="Title"
+                        required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="slug" class="sr-only">Slug</label>
+                    <input type="text" id="slug" name="slug" class="form-control" placeholder="Slug"
+                        required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="sr-only">Content</label>
+                    <textarea name="content" id="content" cols="30" rows="10" class="form-control" required autofocus></textarea>
+                    <span id="content_error" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="tagline" class="sr-only">Tag Line</label>
+                    <input type="text" id="tagline" name="tagline" class="form-control" placeholder="Tag Line"
+                        required autofocus>
+                    <span id="tagline_error" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="img_file" class="sr-only">Image</label>
+                    <input type="file" class="form-control" placeholder="Image Filename" name = "img_file" id="img_file">
+                    <span id="img_file_error" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" id="msgAlert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-sm btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block customjs %} 
+<script>
+    $(document).ready(function () {
+        //For slug
+        $('#title').on('input', function() {
+            let slug = $(this).val().replace(/\s+/g, '-').toLowerCase();
+            $('#slug').val(slug);
+        });
+
+        // trigger input to trigger validation
+        $('#title').trigger('input');
+    });
+</script>
+{% endblock %}
